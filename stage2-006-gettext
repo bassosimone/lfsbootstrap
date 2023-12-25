@@ -1,0 +1,11 @@
+#!/bin/bash
+set -euxo pipefail
+
+cd /tmp
+tar -xf /usr/src/gettext-0.22.tar.xz
+cd gettext-0.22
+./configure --disable-shared
+make -j$(nproc)
+cp -v gettext-tools/src/{msgfmt,msgmerge,xgettext} /usr/bin
+cd /tmp
+rm -rf /tmp/gettext-0.22
