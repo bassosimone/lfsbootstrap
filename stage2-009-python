@@ -1,0 +1,17 @@
+#!/bin/bash
+set -euxo pipefail
+
+cd /tmp
+tar -xf /usr/src/Python-3.11.4.tar.xz
+cd Python-3.11.4
+
+./configure --prefix=/usr \
+	--enable-shared \
+	--without-ensurepip
+
+make -j$(nproc)
+
+make install
+
+cd /tmp
+rm -rf /tmp/Python-3.11.4

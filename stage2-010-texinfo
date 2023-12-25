@@ -1,0 +1,15 @@
+#!/bin/bash
+set -euxo pipefail
+
+cd /tmp
+tar -xf /usr/src/texinfo-7.0.3.tar.xz
+cd texinfo-7.0.3
+
+./configure --prefix=/usr
+
+make -j$(nproc)
+
+make install
+
+cd /tmp
+rm -rf /tmp/texinfo-7.0.3
