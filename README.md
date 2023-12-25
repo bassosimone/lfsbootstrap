@@ -7,9 +7,9 @@ These scripts use LFS v12.0-systemd.
 ## Usage
 
 ```sh
-# Chapters 5 and 6 of LFS
+# Chapters 5 and 6
 ./stage1.bash
 
-# Chapter 7 of LFS
+# Chapter 7
 sudo ./stage2.bash
 ```
