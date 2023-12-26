@@ -29,9 +29,7 @@ cp -rv usr/include $DESTDIR/usr
 /sbin/pkg-mkmanifest $DESTDIR $(echo $pkg_name | sed 's/^linux-/linux-headers-/g')
 
 # install the actual package in the root
-#
-# Nothing! Here we just want to record the correct header
-# files names to attribute them to this package.
+/sbin/pkg-install $DESTDIR
 
 # remove temporary dir
 rm -rf $WORK
