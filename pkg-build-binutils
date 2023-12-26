@@ -35,6 +35,8 @@ make DESTDIR=$DESTDIR tooldir=/usr install
 
 rm -fv $DESTDIR/usr/lib/lib{bfd,ctf,ctf-nobfd,gprofng,opcodes,sframe}.a
 
+mv $DESTDIR/etc/gprofng.rc{,.new}
+
 # create package manifest
 /sbin/pkg-mkmanifest $DESTDIR $pkg_name
 

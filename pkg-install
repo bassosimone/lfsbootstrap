@@ -14,7 +14,7 @@ for entry_dot_new in $(find /etc /usr/lib/tmpfiles.d/ /usr/lib/systemd/system/ -
 	entry=${entry_dot_new%%.new}
 
 	# if there's no pre-existing entry just move it
-	if [[ ! -f entry ]]; then
+	if [[ ! -f $entry ]]; then
 		mv $entry_dot_new $entry
 		continue
 	fi
