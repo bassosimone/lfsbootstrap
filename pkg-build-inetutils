@@ -1,0 +1,43 @@
+#!/bin/bash
+set -euxo pipefail
+
+# create temporary directory
+WORK=$(mktemp -d)
+cd $WORK
+
+# extract sources
+pkg_name=inetutils-2.4
+tar -xf /usr/src/$pkg_name.tar.xz
+cd $pkg_name
+
+# prepare the package
+./configure --prefix=/usr \
+	--bindir=/usr/bin \
+	--localstatedir=/var \
+	--disable-logger \
+	--disable-whois \
+	--disable-rcp \
+	--disable-rexec \
+	--disable-rlogin \
+	--disable-rsh \
+	--disable-servers
+
+make -j$(nproc)
+
+# create temporary destination dir
+DESTDIR=$WORK/___destdir___
+/sbin/pkg-mkskel $DESTDIR
+
+# install package into the temporary destination dir
+make DESTDIR=$DESTDIR install
+
+mv -v $DESTDIR/usr/{,s}bin/ifconfig
+
+# create package manifest
+/sbin/pkg-mkmanifest $DESTDIR $pkg_name
+
+# install the actual package in the root
+/sbin/pkg-install $DESTDIR
+
+# remove temporary dir
+rm -rf $WORK
