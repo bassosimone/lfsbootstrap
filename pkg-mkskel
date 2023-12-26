@@ -1,10 +1,7 @@
 #!/bin/bash
 set -euxo pipefail
 
-# read the configuration
-. config.bash
-
-# TODO: keep in sync with pkg-mkskel
+# TODO: keep in sync with stage1-001-create-skel.bash
 util_create_skel() {
 	local destdir=$1
 
@@ -19,9 +16,11 @@ util_create_skel() {
 		mkdir -pv $destdir/lib64
 		;;
 	esac
-
-	# The following lines should only belong to stage1-001-create-skel.bash
-	mkdir -pv $destdir/tools
 }
 
-util_create_skel $LFS
+if [[ $# != 1 ]]; then
+	echo "usage: $0 pkgdir" 1>&2
+	exit 1
+fi
+
+util_create_skel $1

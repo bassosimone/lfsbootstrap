@@ -1,0 +1,9 @@
+#!/bin/bash
+set -euxo pipefail
+
+if [[ $# != 1 ]]; then
+	echo "usage: $0 pkgdir" 1>&2
+	exit 1
+fi
+
+tar -C $1 -cf- . | tar -C / -xvf-

@@ -1,0 +1,19 @@
+#!/bin/bash
+set -euxo pipefail
+
+WORK=$(mktemp -d)
+cd $WORK
+tar -xf /usr/src/man-pages-6.05.01.tar.xz
+cd man-pages-6.05.01
+
+rm -v man3/crypt*
+
+DESTDIR=$WORK/___destdir___
+/sbin/pkg-mkskel $DESTDIR
+
+make prefix=$DESTDIR/usr install
+
+/sbin/pkg-mkmanifest $DESTDIR man-pages-6.05.01
+/sbin/pkg-install $DESTDIR
+
+rm -rf $WORK

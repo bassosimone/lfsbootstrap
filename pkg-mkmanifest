@@ -1,0 +1,16 @@
+#!/bin/bash
+set -euxo pipefail
+
+if [[ $# != 2 ]]; then
+	echo "usage: $0 pkgdir manifest" 1>&2
+	exit 1
+fi
+
+# remove the toplevel symbolic links belonging to the hierarchy
+rm $1/{bin,lib,sbin}
+
+# remove the empty directories
+find $1 -depth -type d -empty -exec rmdir {} \;
+
+# create the installation manifest
+(cd $1 && find . -ls) >/var/lib/pkg-tools/$2
