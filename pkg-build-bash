@@ -25,6 +25,8 @@ DESTDIR=$WORK/___destdir___
 # install package into the temporary destination dir
 make DESTDIR=$DESTDIR install
 
+ln -sf sh $DESTDIR/usr/bin/bash
+
 # create package manifest
 /sbin/pkg-mkmanifest $DESTDIR $pkg_name
 
