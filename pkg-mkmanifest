@@ -9,11 +9,16 @@ fi
 # remove the toplevel symbolic links belonging to the hierarchy
 rm $1/{bin,lib,sbin}
 
+# remove .la files
+for libdir in $1/usr/lib $1/usr/libexec; do
+	if [[ ! -d $libdir ]]; then
+		continue
+	fi
+	find $libdir -name \*.la -delete
+done
+
 # remove the empty directories
 find $1 -depth -type d -empty -exec rmdir {} \;
-
-# remove .la files
-find $1/usr/lib $1/usr/libexec -name \*.la -delete
 
 # make sure the manifest name is lowercase and also replace _ with -
 manifest=$(echo $2 | tr 'A-Z' 'a-z' | tr '_' '-')
