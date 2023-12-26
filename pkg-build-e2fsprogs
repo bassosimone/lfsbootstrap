@@ -1,0 +1,49 @@
+#!/bin/bash
+set -euxo pipefail
+
+# create temporary directory
+WORK=$(mktemp -d)
+cd $WORK
+
+# extract sources
+pkg_name=e2fsprogs-1.47.0
+tar -xf /usr/src/$pkg_name.tar.gz
+cd $pkg_name
+
+# prepare the package
+mkdir -v build
+cd build
+
+../configure --prefix=/usr \
+	--sysconfdir=/etc \
+	--enable-elf-shlibs \
+	--disable-libblkid \
+	--disable-libuuid \
+	--disable-uuidd \
+	--disable-fsck
+
+make -j$(nproc)
+
+# create temporary destination dir
+DESTDIR=$WORK/___destdir___
+/sbin/pkg-mkskel $DESTDIR
+
+# install package into the temporary destination dir
+make DESTDIR=$DESTDIR install
+
+rm -fv $DESTDIR/usr/lib/{libcom_err,libe2p,libext2fs,libss}.a
+
+gunzip -v $DESTDIR/usr/share/info/libext2fs.info.gz
+
+for file in $(find $DESTDIR/etc -type f); do
+	mv $file $file.new
+done
+
+# create package manifest
+/sbin/pkg-mkmanifest $DESTDIR $pkg_name
+
+# install the actual package in the root
+/sbin/pkg-install $DESTDIR
+
+# remove temporary dir
+rm -rf $WORK
