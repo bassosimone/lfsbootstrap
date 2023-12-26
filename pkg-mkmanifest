@@ -12,5 +12,8 @@ rm $1/{bin,lib,sbin}
 # remove the empty directories
 find $1 -depth -type d -empty -exec rmdir {} \;
 
+# make sure the manifest name is lowercase
+manifest=$(echo $2 | tr 'A-Z' 'a-z')
+
 # create the installation manifest
-(cd $1 && find . -ls) >/var/lib/pkg-tools/manifest/$2.txt
+(cd $1 && find . -ls) >/var/lib/pkg-tools/manifest/$manifest.txt
