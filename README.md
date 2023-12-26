@@ -2,7 +2,7 @@
 
 Scripts to bootstrap a Linux From Scratch environment.
 
-These scripts use LFS v12.0-systemd.
+These scripts use [LFS v12.0-systemd](https://www.linuxfromscratch.org/lfs/view/12.0-systemd/).
 
 ## Installing dependencies
 
