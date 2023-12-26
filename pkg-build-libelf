@@ -1,0 +1,39 @@
+#!/bin/bash
+set -euxo pipefail
+
+# create temporary directory
+WORK=$(mktemp -d)
+cd $WORK
+
+# extract sources
+pkg_name=elfutils-0.189
+tar -xf /usr/src/$pkg_name.tar.bz2
+cd $pkg_name
+
+# prepare the package
+./configure --prefix=/usr \
+	--disable-debuginfod \
+	--enable-libdebuginfod=dummy
+
+make -j$(nproc)
+
+# create temporary destination dir
+DESTDIR=$WORK/___destdir___
+/sbin/pkg-mkskel $DESTDIR
+
+# install package into the temporary destination dir
+make -C libelf DESTDIR=$DESTDIR install
+
+install -d $DESTDIR/usr/lib/pkgconfig
+install -vm644 config/libelf.pc $DESTDIR/usr/lib/pkgconfig
+
+rm $DESTDIR/usr/lib/libelf.a
+
+# create package manifest
+/sbin/pkg-mkmanifest $DESTDIR $pkg_name
+
+# install the actual package in the root
+/sbin/pkg-install $DESTDIR
+
+# remove temporary dir
+rm -rf $WORK
