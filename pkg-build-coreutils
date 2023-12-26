@@ -1,0 +1,43 @@
+#!/bin/bash
+set -euxo pipefail
+
+# create temporary directory
+WORK=$(mktemp -d)
+cd $WORK
+
+# extract sources
+pkg_name=coreutils-9.3
+tar -xf /usr/src/$pkg_name.tar.xz
+cd $pkg_name
+
+# prepare the package
+patch -Np1 -i /usr/src/coreutils-9.3-i18n-1.patch
+
+autoreconf -fiv
+FORCE_UNSAFE_CONFIGURE=1 ./configure \
+	--prefix=/usr \
+	--enable-no-install-program=kill,uptime
+
+make -j$(nproc)
+
+# create temporary destination dir
+DESTDIR=$WORK/___destdir___
+/sbin/pkg-mkskel $DESTDIR
+
+# install package into the temporary destination dir
+make DESTDIR=$DESTDIR install
+
+mv -v $DESTDIR/usr/bin/chroot $DESTDIR/usr/sbin
+
+install -d $DESTDIR/usr/share/man/man8
+mv -v $DESTDIR/usr/share/man/man1/chroot.1 $DESTDIR/usr/share/man/man8/chroot.8
+sed -i 's/"1"/"8"/' $DESTDIR/usr/share/man/man8/chroot.8
+
+# create package manifest
+/sbin/pkg-mkmanifest $DESTDIR $pkg_name
+
+# install the actual package in the root
+/sbin/pkg-install $DESTDIR
+
+# remove temporary dir
+rm -rf $WORK
