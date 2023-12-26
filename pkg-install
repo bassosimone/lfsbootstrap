@@ -9,8 +9,8 @@ fi
 # create inline archive and extract to root directory
 tar -C $1 -cf- . | tar -C / -xvf-
 
-# make sure we do not keep .new files around the /etc hier
-for entry_dot_new in $(find /etc -type f -name \*.new); do
+# make sure we do not keep .new files around unless they're needed
+for entry_dot_new in $(find /etc /usr/lib/tmpfiles.d/ /usr/lib/systemd/system/ -type f -name \*.new); do
 	entry=${entry_dot_new%%.new}
 
 	# if there's no pre-existing entry just move it

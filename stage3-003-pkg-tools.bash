@@ -11,7 +11,7 @@ tools=(
 )
 
 # install pkg-tools
-manifest=$LFS/var/lib/pkg-tools/pkg-tools-12.0.0
+manifest=$LFS/var/lib/pkg-tools/manifest/pkg-tools-12.0.0.txt
 install -d $(dirname $manifest)
 for tool in ${tools[@]}; do
 	install $tool $LFS/sbin
