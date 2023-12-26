@@ -1,0 +1,37 @@
+#!/bin/bash
+set -euxo pipefail
+
+# create temporary directory
+WORK=$(mktemp -d)
+cd $WORK
+
+# extract sources
+pkg_name=gawk-5.2.2
+tar -xf /usr/src/$pkg_name.tar.xz
+cd $pkg_name
+
+# prepare the package
+sed -i 's/extras//' Makefile.in
+
+./configure --prefix=/usr
+
+make -j$(nproc)
+
+# create temporary destination dir
+DESTDIR=$WORK/___destdir___
+/sbin/pkg-mkskel $DESTDIR
+
+# install package into the temporary destination dir
+make DESTDIR=$DESTDIR LN='ln -f' install
+
+ln -sfv gawk $DESTDIR/usr/bin/awk
+ln -sfv gawk.1 $DESTDIR/usr/share/man/man1/awk.1
+
+# create package manifest
+/sbin/pkg-mkmanifest $DESTDIR $pkg_name
+
+# install the actual package in the root
+/sbin/pkg-install $DESTDIR
+
+# remove temporary dir
+rm -rf $WORK
