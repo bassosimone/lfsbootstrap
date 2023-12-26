@@ -1,0 +1,45 @@
+#!/bin/bash
+set -euxo pipefail
+
+# create temporary directory
+WORK=$(mktemp -d)
+cd $WORK
+
+# extract sources
+pkg_name=vim-9.0.1677
+tar -xf /usr/src/$pkg_name.tar.gz
+cd $pkg_name
+
+# prepare the package
+echo '#define SYS_VIMRC_FILE "/etc/vimrc"' >>src/feature.h
+
+./configure --prefix=/usr
+
+make -j$(nproc)
+
+# create temporary destination dir
+DESTDIR=$WORK/___destdir___
+/sbin/pkg-mkskel $DESTDIR
+
+# install package into the temporary destination dir
+make DESTDIR=$DESTDIR install
+
+ln -sv vim $DESTDIR/usr/bin/vi
+for L in $DESTDIR/usr/share/man/{,*/}man1/vim.1; do
+	ln -sv vim.1 $(dirname $L)/vi.1
+done
+
+install -d $DESTDIR/usr/share/doc/
+ln -sv ../vim/vim90/doc $DESTDIR/usr/share/doc/vim-9.0.1677
+
+cat >$DESTDIR/etc/vimrc.new <<"EOF"
+EOF
+
+# create package manifest
+/sbin/pkg-mkmanifest $DESTDIR $pkg_name
+
+# install the actual package in the root
+/sbin/pkg-install $DESTDIR
+
+# remove temporary dir
+rm -rf $WORK
