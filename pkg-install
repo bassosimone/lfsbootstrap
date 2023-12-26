@@ -6,4 +6,25 @@ if [[ $# != 1 ]]; then
 	exit 1
 fi
 
+# create inline archive and extract to root directory
 tar -C $1 -cf- . | tar -C / -xvf-
+
+# make sure we do not keep .new files around the /etc hier
+for entry_dot_new in $(find /etc -type f -name \*.new); do
+	entry=${entry_dot_new%%.new}
+
+	# if there's no pre-existing entry just move it
+	if [[ ! -f entry ]]; then
+		mv $entry_dot_new $entry
+		continue
+	fi
+
+	# if there are no changes, zap the .new file
+	if ! cmp $entry $entry_dot_new; then
+		rm $entry_dot_new
+		continue
+	fi
+done
+
+# make sure we update symbolic links
+/sbin/ldconfig

@@ -6,19 +6,20 @@ WORK=$(mktemp -d)
 cd $WORK
 
 # extract sources
-pkg_name=man-pages-6.05.01
-tar -xf /usr/src/$pkg_name.tar.xz
+pkg_name=iana-etc-20230810
+tar -xf /usr/src/$pkg_name.tar.gz
 cd $pkg_name
 
 # prepare the package
-rm -v man3/crypt*
+# nothing!
 
 # create temporary destination dir
 DESTDIR=$WORK/___destdir___
 /sbin/pkg-mkskel $DESTDIR
 
 # install package into the temporary destination dir
-make prefix=$DESTDIR/usr install
+cp services $DESTDIR/etc/services.new
+cp protocols $DESTDIR/etc/protocols.new
 
 # create package manifest
 /sbin/pkg-mkmanifest $DESTDIR $pkg_name
