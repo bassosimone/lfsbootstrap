@@ -13,11 +13,11 @@ set -x
 name=${1##pkg-build-}
 
 # figure out the next number
-lastnum=$(ls stage3-*.bash | tail -n1 | awk -F- '{print $2}' | sed 's/^0*//g')
+lastnum=$(ls stage4-*.bash | tail -n1 | awk -F- '{print $2}' | sed 's/^0*//g')
 nextnum=$(printf "%03d" $(($lastnum + 1)))
 
 # compute bash file name
-bashfile="stage3-$nextnum-$name.bash"
+bashfile="stage4-$nextnum-$name.bash"
 
 # compute extension-less file name
 extless=${bashfile%%.bash}
