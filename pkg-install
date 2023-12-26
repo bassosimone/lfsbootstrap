@@ -20,7 +20,7 @@ for entry_dot_new in $(find /etc /usr/lib/tmpfiles.d/ /usr/lib/systemd/system/ -
 	fi
 
 	# if there are no changes, zap the .new file
-	if ! cmp $entry $entry_dot_new; then
+	if cmp $entry $entry_dot_new; then
 		rm $entry_dot_new
 		continue
 	fi
