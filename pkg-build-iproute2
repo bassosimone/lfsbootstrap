@@ -1,0 +1,37 @@
+#!/bin/bash
+set -euxo pipefail
+
+# create temporary directory
+WORK=$(mktemp -d)
+cd $WORK
+
+# extract sources
+pkg_name=iproute2-6.4.0
+tar -xf /usr/src/$pkg_name.tar.xz
+cd $pkg_name
+
+# prepare the package
+sed -i /ARPD/d Makefile
+rm -fv man/man8/arpd.8
+
+make -j$(nproc) NETNS_RUN_DIR=/run/netns
+
+# create temporary destination dir
+DESTDIR=$WORK/___destdir___
+/sbin/pkg-mkskel $DESTDIR
+
+# install package into the temporary destination dir
+make DESTDIR=$DESTDIR SBINDIR=/usr/sbin install
+
+for file in $(find $DESTDIR/etc -type f); do
+	mv $file $file.new
+done
+
+# create package manifest
+/sbin/pkg-mkmanifest $DESTDIR $pkg_name
+
+# install the actual package in the root
+/sbin/pkg-install $DESTDIR
+
+# remove temporary dir
+rm -rf $WORK
