@@ -12,4 +12,7 @@ These scripts use LFS v12.0-systemd.
 
 # Chapter 7
 sudo ./stage2.bash
+
+# Chapter 8
+sudo ./stage3.bash
 ```
