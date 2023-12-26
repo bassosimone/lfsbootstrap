@@ -1,11 +1,13 @@
 #!/bin/bash
-set -euxo pipefail
+set -euo pipefail
 
 # make sure we have a formula to build
 if [[ $# != 1 ]]; then
-	echo "usage: $1 NAME" 1>&2
+	echo "usage: $0 NAME" 1>&2
 	exit 1
 fi
+
+set -x
 
 # get the formula name
 name=${1##pkg-build-}
