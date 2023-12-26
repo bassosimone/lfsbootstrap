@@ -1,0 +1,49 @@
+#!/bin/bash
+set -euxo pipefail
+
+# create temporary directory
+WORK=$(mktemp -d)
+cd $WORK
+
+# extract sources
+pkg_name=ncurses-6.4
+tar -xf /usr/src/$pkg_name.tar.gz
+cd $pkg_name
+
+# prepare the package
+./configure --prefix=/usr \
+	--mandir=/usr/share/man \
+	--with-shared \
+	--without-debug \
+	--without-normal \
+	--with-cxx-shared \
+	--enable-pc-files \
+	--enable-widec \
+	--with-pkg-config-libdir=/usr/lib/pkgconfig
+
+make -j$(nproc)
+
+# create temporary destination dir
+DESTDIR=$WORK/___destdir___
+/sbin/pkg-mkskel $DESTDIR
+
+# install package into the temporary destination dir
+make DESTDIR=$DESTDIR install
+
+for lib in ncurses form panel menu; do
+	rm -vf $DESTDIR/usr/lib/lib${lib}.so
+	echo "INPUT(-l${lib}w)" >$DESTDIR/usr/lib/lib${lib}.so
+	ln -sfv ${lib}w.pc $DESTDIR/usr/lib/pkgconfig/${lib}.pc
+done
+
+echo "INPUT(-lncursesw)" >$DESTDIR/usr/lib/libcursesw.so
+ln -sfv libncurses.so $DESTDIR/usr/lib/libcurses.so
+
+# create package manifest
+/sbin/pkg-mkmanifest $DESTDIR $pkg_name
+
+# install the actual package in the root
+/sbin/pkg-install $DESTDIR
+
+# remove temporary dir
+rm -rf $WORK
