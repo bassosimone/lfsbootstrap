@@ -4,7 +4,16 @@ Scripts to bootstrap a Linux From Scratch environment.
 
 These scripts use LFS v12.0-systemd.
 
-## Usage
+## Installing dependencies
+
+### Debian bookworm
+
+```sh
+sudo apt-get install bison build-essential gawk flex git \
+	libgmp-dev libmpc-dev libmpfr-dev texinfo
+```
+
+## Building LFS rootfs
 
 ```sh
 # Chapters 5 and 6
