@@ -1,0 +1,40 @@
+#!/bin/bash
+set -euxo pipefail
+
+# create temporary directory
+WORK=$(mktemp -d)
+cd $WORK
+
+# extract sources
+pkg_name=openssl-3.1.2
+tar -xf /usr/src/$pkg_name.tar.gz
+cd $pkg_name
+
+# prepare the package
+./config --prefix=/usr \
+	--openssldir=/etc/ssl \
+	--libdir=lib \
+	shared \
+	zlib-dynamic
+
+make -j$(nproc)
+
+# create temporary destination dir
+DESTDIR=$WORK/___destdir___
+/sbin/pkg-mkskel $DESTDIR
+
+# install package into the temporary destination dir
+sed -i '/INSTALL_LIBS/s/libcrypto.a libssl.a//' Makefile
+make MANSUFFIX=ssl DESTDIR=$DESTDIR install
+
+mv -v $DESTDIR/usr/share/doc/openssl $DESTDIR/usr/share/doc/openssl-3.1.2
+find $DESTDIR/etc -type f -exec mv {} {}.new \;
+
+# create package manifest
+/sbin/pkg-mkmanifest $DESTDIR $pkg_name
+
+# install the actual package in the root
+/sbin/pkg-install $DESTDIR
+
+# remove temporary dir
+rm -rf $WORK
