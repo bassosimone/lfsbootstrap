@@ -1,0 +1,38 @@
+#!/bin/bash
+set -euxo pipefail
+
+# create temporary directory
+WORK=$(mktemp -d)
+cd $WORK
+
+# extract sources
+pkg_name=procps-ng-4.0.3
+tar -xf /usr/src/$pkg_name.tar.xz
+cd $pkg_name
+
+# prepare the package
+#
+# TODO(bassosimone): use --with-systemd when we install systemd.
+./configure --prefix=/usr \
+	--docdir=/usr/share/doc/procps-ng-4.0.3 \
+	--disable-static \
+	--disable-kill \
+	--without-systemd
+
+make -j$(nproc)
+
+# create temporary destination dir
+DESTDIR=$WORK/___destdir___
+/sbin/pkg-mkskel $DESTDIR
+
+# install package into the temporary destination dir
+make DESTDIR=$DESTDIR install
+
+# create package manifest
+/sbin/pkg-mkmanifest $DESTDIR $pkg_name
+
+# install the actual package in the root
+/sbin/pkg-install $DESTDIR
+
+# remove temporary dir
+rm -rf $WORK
