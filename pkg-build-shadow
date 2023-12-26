@@ -1,0 +1,61 @@
+#!/bin/bash
+set -euxo pipefail
+
+# run the preinstallation script
+touch /usr/bin/passwd
+mkdir -p /etc/default
+
+# create temporary directory
+WORK=$(mktemp -d)
+cd $WORK
+
+# extract sources
+pkg_name=shadow-4.13
+tar -xf /usr/src/$pkg_name.tar.xz
+cd $pkg_name
+
+# prepare the package
+sed -i 's/groups$(EXEEXT) //' src/Makefile.in
+find man -name Makefile.in -exec sed -i 's/groups\.1 / /' {} \;
+find man -name Makefile.in -exec sed -i 's/getspnam\.3 / /' {} \;
+find man -name Makefile.in -exec sed -i 's/passwd\.5 / /' {} \;
+
+sed -e 's:#ENCRYPT_METHOD DES:ENCRYPT_METHOD YESCRYPT:' \
+	-e 's:/var/spool/mail:/var/mail:' \
+	-e '/PATH=/{s@/sbin:@@;s@/bin:@@}' \
+	-i etc/login.defs
+
+./configure --sysconfdir=/etc \
+	--disable-static \
+	--with-{b,yes}crypt \
+	--with-group-name-max-length=32
+
+make -j$(nproc)
+
+# create temporary destination dir
+DESTDIR=$WORK/___destdir___
+/sbin/pkg-mkskel $DESTDIR
+
+# install package into the temporary destination dir
+make DESTDIR=$DESTDIR exec_prefix=/usr install
+make DESTDIR=$DESTDIR -C man install-man
+
+mv $DESTDIR/etc/login.access{,.new}
+mv $DESTDIR/etc/limits{,.new}
+mv $DESTDIR/etc/login.defs{,.new}
+
+# create package manifest
+/sbin/pkg-mkmanifest $DESTDIR $pkg_name
+
+# install the actual package in the root
+/sbin/pkg-install $DESTDIR
+
+# run the post installation script
+if test ! -f /etc/shadow; then
+	pwconv
+	grpconv
+	useradd -D --gid 999
+fi
+
+# remove temporary dir
+rm -rf $WORK
