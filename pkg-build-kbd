@@ -1,0 +1,37 @@
+#!/bin/bash
+set -euxo pipefail
+
+# create temporary directory
+WORK=$(mktemp -d)
+cd $WORK
+
+# extract sources
+pkg_name=kbd-2.6.1
+tar -xf /usr/src/$pkg_name.tar.xz
+cd $pkg_name
+
+# prepare the package
+patch -Np1 -i /usr/src/kbd-2.6.1-backspace-1.patch
+
+sed -i '/RESIZECONS_PROGS=/s/yes/no/' configure
+sed -i 's/resizecons.8 //' docs/man/man8/Makefile.in
+
+./configure --prefix=/usr --disable-vlock
+
+make -j$(nproc)
+
+# create temporary destination dir
+DESTDIR=$WORK/___destdir___
+/sbin/pkg-mkskel $DESTDIR
+
+# install package into the temporary destination dir
+make DESTDIR=$DESTDIR install
+
+# create package manifest
+/sbin/pkg-mkmanifest $DESTDIR $pkg_name
+
+# install the actual package in the root
+/sbin/pkg-install $DESTDIR
+
+# remove temporary dir
+rm -rf $WORK
