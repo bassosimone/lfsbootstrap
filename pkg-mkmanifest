@@ -12,6 +12,9 @@ rm $1/{bin,lib,sbin}
 # remove the empty directories
 find $1 -depth -type d -empty -exec rmdir {} \;
 
+# remove .la files
+find $1/usr/lib $1/usr/libexec -name \*.la -delete
+
 # make sure the manifest name is lowercase and also replace _ with -
 manifest=$(echo $2 | tr 'A-Z' 'a-z' | tr '_' '-')
 
