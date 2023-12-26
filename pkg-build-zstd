@@ -1,0 +1,32 @@
+#!/bin/bash
+set -euxo pipefail
+
+# create temporary directory
+WORK=$(mktemp -d)
+cd $WORK
+
+# extract sources
+pkg_name=zstd-1.5.5
+tar -xf /usr/src/$pkg_name.tar.gz
+cd $pkg_name
+
+# prepare the package
+make prefix=/usr -j$(nproc)
+
+# create temporary destination dir
+DESTDIR=$WORK/___destdir___
+/sbin/pkg-mkskel $DESTDIR
+
+# install package into the temporary destination dir
+make prefix=$DESTDIR/usr install
+
+rm -v $DESTDIR/usr/lib/libzstd.a
+
+# create package manifest
+/sbin/pkg-mkmanifest $DESTDIR $pkg_name
+
+# install the actual package in the root
+/sbin/pkg-install $DESTDIR
+
+# remove temporary dir
+rm -rf $WORK
