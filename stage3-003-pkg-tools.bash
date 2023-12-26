@@ -20,5 +20,5 @@ done
 # register installation
 rm -f $manifest
 for tool in ${tools[@]}; do
-	(cd $LFS && find "./sbin/$tool" -ls) >>$manifest
+	(cd $LFS && find "./usr/sbin/$tool" -ls) >>$manifest
 done
