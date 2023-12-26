@@ -30,7 +30,9 @@ install -vm644 config/libelf.pc $DESTDIR/usr/lib/pkgconfig
 rm $DESTDIR/usr/lib/libelf.a
 
 # create package manifest
-/sbin/pkg-mkmanifest $DESTDIR $pkg_name
+#
+# Note: we need to override the package name here
+/sbin/pkg-mkmanifest $DESTDIR $(echo $pkg_name | sed 's/elfutils-/libelf-/g')
 
 # install the actual package in the root
 /sbin/pkg-install $DESTDIR
