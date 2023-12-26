@@ -1,0 +1,36 @@
+#!/bin/bash
+set -euxo pipefail
+
+# create temporary directory
+WORK=$(mktemp -d)
+cd $WORK
+
+# extract sources
+pkg_name=ninja-1.11.1
+tar -xf /usr/src/$pkg_name.tar.gz
+cd $pkg_name
+
+# prepare the package
+python3 configure.py --bootstrap
+
+# create temporary destination dir
+DESTDIR=$WORK/___destdir___
+/sbin/pkg-mkskel $DESTDIR
+
+# install package into the temporary destination dir
+install -vm755 ninja $DESTDIR/usr/bin/
+
+install -d $DESTDIR/usr/share/bash-completion/completions/
+install -vDm644 misc/bash-completion $DESTDIR/usr/share/bash-completion/completions/ninja
+
+install -d $DESTDIR/usr/share/zsh/site-functions/
+install -vDm644 misc/zsh-completion $DESTDIR/usr/share/zsh/site-functions/_ninja
+
+# create package manifest
+/sbin/pkg-mkmanifest $DESTDIR $pkg_name
+
+# install the actual package in the root
+/sbin/pkg-install $DESTDIR
+
+# remove temporary dir
+rm -rf $WORK
