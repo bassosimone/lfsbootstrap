@@ -1,0 +1,42 @@
+#!/bin/bash
+set -euxo pipefail
+
+# create temporary directory
+WORK=$(mktemp -d)
+cd $WORK
+
+# extract sources
+pkg_name=readline-8.2
+tar -xf /usr/src/$pkg_name.tar.gz
+cd $pkg_name
+
+# prepare the package
+sed -i '/MV.*old/d' Makefile.in
+sed -i '/{OLDSUFF}/c:' support/shlib-install
+
+patch -Np1 -i /usr/src/readline-8.2-upstream_fix-1.patch
+
+./configure --prefix=/usr \
+	--disable-static \
+	--with-curses \
+	--docdir=/usr/share/doc/readline-8.2
+
+make SHLIB_LIBS="-lncursesw" -j$(nproc)
+
+# create temporary destination dir
+DESTDIR=$WORK/___destdir___
+/sbin/pkg-mkskel $DESTDIR
+
+# install package into the temporary destination dir
+make SHLIB_LIBS="-lncursesw" DESTDIR=$DESTDIR install
+
+install -v -m644 doc/*.{ps,pdf,html,dvi} $DESTDIR/usr/share/doc/readline-8.2
+
+# create package manifest
+/sbin/pkg-mkmanifest $DESTDIR $pkg_name
+
+# install the actual package in the root
+/sbin/pkg-install $DESTDIR
+
+# remove temporary dir
+rm -rf $WORK
