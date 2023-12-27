@@ -57,6 +57,12 @@ You cannot reinstall `glibc`. The install script will fail and leave under `/tmp
 
 Remember to update the [VERSION](VERSION) file with the correct patch level.
 
+Remember to check for `/etc` files to merge:
+
+```sh
+find /etc -type f -name \*.new
+```
+
 ## Upgrading
 
 Update the scripts and re-run the whole procedure to obtain `stage5.tar`, then
