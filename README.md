@@ -25,4 +25,7 @@ sudo ./stage2.bash
 # Chapter 8
 sudo ./stage3.bash
 sudo ./stage4.bash
+
+# BLFS
+sudo ./stage5.bash
 ```
