@@ -19,7 +19,7 @@ cd $pkg_name
 # prepare the package
 patch -Np1 -i /usr/src/glibc-2.38-fhs-1.patch
 
-patch -Np1 -i /usr/src/glibc-2.38-memalign_fix-1.patch
+patch -Np1 -i /usr/src/glibc-2.38-upstream_fixes-3.patch
 
 mkdir -v build
 cd build
@@ -71,6 +71,12 @@ cat >$DESTDIR/etc/ld.so.conf.new <<"EOF"
 /opt/lib
 include /etc/ld.so.conf.d/*.conf
 EOF
+
+# prevent reinstalling glibc as this would nuke the system
+[[ -f /glib-reinstall-ok ]] || {
+	echo "FATAL: refusing to reinstall glibc" 1>&2
+	exit 1
+}
 
 # create package manifest
 /sbin/pkg-mkmanifest $DESTDIR $pkg_name
