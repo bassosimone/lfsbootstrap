@@ -6,7 +6,7 @@ WORK=$(mktemp -d)
 cd $WORK
 
 # extract sources
-pkg_name=Python-3.11.4
+pkg_name=Python-3.11.7
 tar -xf /usr/src/$pkg_name.tar.xz
 cd $pkg_name
 
