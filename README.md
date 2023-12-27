@@ -14,6 +14,10 @@ sudo apt-get install bison build-essential gawk flex git \
 	libgmp-dev libmpc-dev libmpfr-dev texinfo
 ```
 
+### LFS
+
+You should already have all the required packages installed.
+
 ## Building LFS rootfs
 
 ```sh
