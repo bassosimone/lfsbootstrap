@@ -44,7 +44,7 @@ wsl.exe --import lfs-12.0 .\lfs-12.0 .\stage5.tar
 
 ## Deploying security fixes
 
-Periodically check [security advisories](https://www.linuxfromscratch.org/blfs/advisories/consolidated.html).
+Periodically check the [security advisories](https://www.linuxfromscratch.org/blfs/advisories/consolidated.html).
 
 Download tarballs and install them at `/usr/src` using `install -m644 -v`.
 
