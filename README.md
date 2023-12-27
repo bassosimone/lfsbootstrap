@@ -1,6 +1,6 @@
 # Linux From Scratch bootstrap
 
-Scripts to bootstrap a Linux From Scratch environment. The objective is to create a system image
+Scripts to bootstrap a Linux From Scratch environment system image
 to use under [WSL2](https://en.wikipedia.org/wiki/Windows_Subsystem_for_Linux).
 
 We use [LFS v12.0-systemd](https://www.linuxfromscratch.org/lfs/view/12.0-systemd/).
