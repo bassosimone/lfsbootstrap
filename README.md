@@ -55,6 +55,8 @@ As root, run `bash pkg-build-XXX` to recompile and install.
 You cannot reinstall `glibc`. The install script will fail and leave under `/tmp` a
 `DESTDIR` installation from which you can pick files to manually install.
 
+Remember to update the [VERSION](VERSION) file with the correct patch level.
+
 ## Upgrading
 
 Update the scripts and re-run the whole procedure to obtain `stage5.tar`, then
