@@ -6,7 +6,7 @@ WORK=$(mktemp -d)
 cd $WORK
 
 # extract sources
-pkg_name=curl-8.2.1
+pkg_name=curl-8.5.0
 tar -xf /usr/src/$pkg_name.tar.xz
 cd $pkg_name
 
