@@ -1,8 +1,9 @@
 # Linux From Scratch bootstrap
 
-Scripts to bootstrap a Linux From Scratch environment.
+Scripts to bootstrap a Linux From Scratch environment. The objective is to create a system image
+to use under [WSL2](https://en.wikipedia.org/wiki/Windows_Subsystem_for_Linux).
 
-These scripts use [LFS v12.0-systemd](https://www.linuxfromscratch.org/lfs/view/12.0-systemd/).
+We use [LFS v12.0-systemd](https://www.linuxfromscratch.org/lfs/view/12.0-systemd/).
 
 ## Installing dependencies
 
@@ -26,6 +27,6 @@ sudo ./stage2.bash
 sudo ./stage3.bash
 sudo ./stage4.bash
 
-# BLFS
+# Chapters 9, 10, and 11 plus some BLFS
 sudo ./stage5.bash
 ```
