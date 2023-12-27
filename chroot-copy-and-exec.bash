@@ -7,6 +7,11 @@ set -euxo pipefail
 # read file name
 filename=$0
 
+# handle the case where the file name is provided as first argument
+if [[ $# -ge 1 ]]; then
+	filename=$1
+fi
+
 # obtain the name of the script to execute
 script=${filename%%.bash}
 

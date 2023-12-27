@@ -1,0 +1,29 @@
+#!/bin/bash
+set -euxo pipefail
+
+# create temporary directory
+WORK=$(mktemp -d)
+cd $WORK
+
+# there no unpacking but let's still define the package name
+pkg_name=resolvconf-20231227
+
+# create temporary destination dir
+DESTDIR=$WORK/___destdir___
+/sbin/pkg-mkskel $DESTDIR
+
+# install package into the temporary destination dir
+cat >$DESTDIR/etc/resolv.conf.new <<"EOF"
+nameserver 8.8.8.8
+nameserver 1.1.1.1
+nameserver 9.9.9.9
+EOF
+
+# create package manifest
+/sbin/pkg-mkmanifest $DESTDIR $pkg_name
+
+# install the actual package in the root
+/sbin/pkg-install $DESTDIR
+
+# remove temporary dir
+rm -rf $WORK
