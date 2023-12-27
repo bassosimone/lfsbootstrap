@@ -59,3 +59,9 @@ You cannot reinstall `glibc`. The install script will fail and leave under `/tmp
 
 Update the scripts and re-run the whole procedure to obtain `stage5.tar`, then
 archive your home directory as `home.tar` and start a new WSL distro.
+
+## Removing a distro
+
+```console
+wsl.exe --unregister DISTRO
+```
