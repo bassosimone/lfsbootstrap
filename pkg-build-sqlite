@@ -1,0 +1,40 @@
+#!/bin/bash
+set -euxo pipefail
+
+# create temporary directory
+WORK=$(mktemp -d)
+cd $WORK
+
+# extract sources
+pkg_name=sqlite-3.42.0
+tar -xf /usr/src/sqlite-autoconf-3420000.tar.gz
+mv sqlite-autoconf-3420000 $pkg_name
+cd $pkg_name
+
+# prepare the package
+./configure --prefix=/usr \
+	--disable-static \
+	--enable-fts{4,5} \
+	CPPFLAGS="-DSQLITE_ENABLE_COLUMN_METADATA=1 \
+                      -DSQLITE_ENABLE_UNLOCK_NOTIFY=1   \
+                      -DSQLITE_ENABLE_DBSTAT_VTAB=1     \
+                      -DSQLITE_SECURE_DELETE=1          \
+                      -DSQLITE_ENABLE_FTS3_TOKENIZER=1"
+
+make -j$(nproc)
+
+# create temporary destination dir
+DESTDIR=$WORK/___destdir___
+/sbin/pkg-mkskel $DESTDIR
+
+# install package into the temporary destination dir
+make DESTDIR=$DESTDIR install
+
+# create package manifest
+/sbin/pkg-mkmanifest $DESTDIR $pkg_name
+
+# install the actual package in the root
+/sbin/pkg-install $DESTDIR
+
+# remove temporary dir
+rm -rf $WORK
