@@ -72,6 +72,7 @@ EOF
 cat >$DESTDIR/etc/shells.new <<"EOF"
 /bin/sh
 /bin/bash
+/bin/zsh
 EOF
 
 echo 12.0-systemd >$DESTDIR/etc/lfs-release.new
