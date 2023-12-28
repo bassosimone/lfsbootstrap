@@ -6,7 +6,9 @@ WORK=$(mktemp -d)
 cd $WORK
 
 # extract sources
-pkg_name=tzdata2023c
+__pkg_name=tzdata
+__pkg_version=2023c
+pkg_name=${__pkg_name}${__pkg_version}
 tar -xf /usr/src/$pkg_name.tar.gz
 
 # create temporary destination dir
@@ -28,7 +30,7 @@ zic -d $ZONEINFO -p America/New_York
 unset ZONEINFO
 
 # create package manifest
-/sbin/pkg-mkmanifest $DESTDIR $pkg_name
+/sbin/pkg-mkmanifest $DESTDIR ${__pkg_name}-${__pkg_version}
 
 # install the actual package in the root
 /sbin/pkg-install $DESTDIR
