@@ -25,3 +25,7 @@ util_create_skel() {
 }
 
 util_create_skel $LFS
+
+# The following lines should only belong to stage1-001-create-skel.bash
+install -d $LFS/var/lib/pkg-tools/manifest
+(cd $LFS && find . -ls) >$LFS/var/lib/pkg-tools/manifest/aaa-skel.txt

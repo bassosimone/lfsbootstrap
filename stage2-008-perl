@@ -2,8 +2,8 @@
 set -euxo pipefail
 
 cd /tmp
-tar -xf /usr/src/perl-5.38.0.tar.xz
-cd perl-5.38.0
+tar -xf /usr/src/perl-5.38.2.tar.gz
+cd perl-5.38.2
 
 sh Configure -des \
 	-Dprefix=/usr \
@@ -21,4 +21,4 @@ make -j$(nproc)
 make install
 
 cd /tmp
-rm -rf /tmp/perl-5.38.0
+rm -rf /tmp/perl-5.38.2

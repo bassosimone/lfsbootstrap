@@ -29,14 +29,13 @@ cp -v zone.tab zone1970.tab iso3166.tab $ZONEINFO
 zic -d $ZONEINFO -p America/New_York
 unset ZONEINFO
 
+ln -sfv /usr/share/zoneinfo/Europe/Rome $DESTDIR/etc/localtime
+
 # create package manifest
 /sbin/pkg-mkmanifest $DESTDIR ${__pkg_name}-${__pkg_version}
 
 # install the actual package in the root
 /sbin/pkg-install $DESTDIR
-
-# run the post installation script
-ln -sfv /usr/share/zoneinfo/Europe/Rome /etc/localtime
 
 # remove temporary dir
 rm -rf $WORK
