@@ -7,6 +7,10 @@ cd util-linux-2.39.1
 
 mkdir -pv /var/lib/hwclock
 
+# register the creation of /var/lib/hwclock
+(cd / && find ./var/lib/hwclock -exec ls -dF {} \;) \
+	>/var/lib/pkg-tools/manifest/aaa-var-lib-hwclock.txt
+
 ./configure ADJTIME_PATH=/var/lib/hwclock/adjtime \
 	--libdir=/usr/lib \
 	--runstatedir=/run \

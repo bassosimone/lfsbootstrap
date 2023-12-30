@@ -1,10 +1,6 @@
 #!/bin/bash
 set -euxo pipefail
 
-# run the preinstallation script
-touch /usr/bin/passwd
-mkdir -p /etc/default
-
 # create temporary directory
 WORK=$(mktemp -d)
 cd $WORK

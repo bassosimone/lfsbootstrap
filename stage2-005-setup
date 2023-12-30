@@ -1,33 +1,36 @@
 #!/bin/bash
 set -euxo pipefail
 
-mkdir -pv /{boot,home,mnt,opt,srv}
+setup() {
+	local prefix=$1
 
-mkdir -pv /etc/{opt,sysconfig}
-mkdir -pv /lib/firmware
-mkdir -pv /media/{floppy,cdrom}
-mkdir -pv /usr/{,local/}{include,src}
-mkdir -pv /usr/local/{bin,lib,sbin}
-mkdir -pv /usr/{,local/}share/{color,dict,doc,info,locale,man}
-mkdir -pv /usr/{,local/}share/{misc,terminfo,zoneinfo}
-mkdir -pv /usr/{,local/}share/man/man{1..8}
-mkdir -pv /var/{cache,local,log,mail,opt,spool}
-mkdir -pv /var/lib/{color,misc,locate}
+	mkdir -pv ${prefix}{boot,home,mnt,opt,srv}
 
-ln -sfv /run /var/run
-ln -sfv /run/lock /var/lock
+	mkdir -pv ${prefix}etc/{opt,sysconfig}
+	mkdir -pv ${prefix}usr/lib/firmware
+	mkdir -pv ${prefix}media/{floppy,cdrom}
+	mkdir -pv ${prefix}usr/{,local/}{include,src}
+	mkdir -pv ${prefix}usr/local/{bin,lib,sbin}
+	mkdir -pv ${prefix}usr/{,local/}share/{color,dict,doc,info,locale,man}
+	mkdir -pv ${prefix}usr/{,local/}share/{misc,terminfo,zoneinfo}
+	mkdir -pv ${prefix}usr/{,local/}share/man/man{1..8}
+	mkdir -pv ${prefix}var/{cache,local,log,mail,opt,spool}
+	mkdir -pv ${prefix}var/lib/{color,misc,locate}
 
-install -dv -m 0750 /root
-install -dv -m 1777 /tmp /var/tmp
+	ln -sfv /run ${prefix}var/run
+	ln -sfv /run/lock ${prefix}var/lock
 
-ln -sv /proc/self/mounts /etc/mtab
+	install -dv -m 0750 ${prefix}root
+	install -dv -m 1777 ${prefix}tmp ${prefix}var/tmp
 
-cat >/etc/hosts <<EOF
+	ln -sv /proc/self/mounts ${prefix}etc/mtab
+
+	cat >${prefix}etc/hosts <<EOF
 127.0.0.1  localhost $(hostname)
 ::1        localhost
 EOF
 
-cat >/etc/passwd <<"EOF"
+	cat >${prefix}etc/passwd <<"EOF"
 root:x:0:0:root:/root:/bin/bash
 bin:x:1:1:bin:/dev/null:/usr/bin/false
 daemon:x:6:6:Daemon User:/dev/null:/usr/bin/false
@@ -44,7 +47,7 @@ systemd-oom:x:81:81:systemd Out Of Memory Daemon:/:/usr/bin/false
 nobody:x:65534:65534:Unprivileged User:/dev/null:/usr/bin/false
 EOF
 
-cat >/etc/group <<"EOF"
+	cat >${prefix}etc/group <<"EOF"
 root:x:0:
 bin:x:1:daemon
 sys:x:2:
@@ -81,7 +84,20 @@ users:x:999:
 nogroup:x:65534:
 EOF
 
-touch /var/log/{btmp,lastlog,faillog,wtmp}
-chgrp -v utmp /var/log/lastlog
-chmod -v 664 /var/log/lastlog
-chmod -v 600 /var/log/btmp
+	touch ${prefix}var/log/{btmp,lastlog,faillog,wtmp}
+
+	chgrp -v utmp ${prefix}var/log/lastlog
+	chmod -v 664 ${prefix}var/log/lastlog
+	chmod -v 600 ${prefix}var/log/btmp
+}
+
+# run setup inside the root dir
+setup /
+
+# rerun setup into a temporary dir to capture what changed
+install -d /tmp/altroot
+setup /tmp/altroot/
+(cd /tmp/altroot && find . -exec ls -dF {} \;) >/var/lib/pkg-tools/manifest/aaa-skel-stage2.txt
+find /tmp/altroot -type l -exec rm {} \;
+find /tmp/altroot -type f -exec rm {} \;
+find /tmp/altroot -depth -type d -exec rmdir {} \;

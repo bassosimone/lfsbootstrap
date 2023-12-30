@@ -46,13 +46,13 @@ make DESTDIR=$DESTDIR install
 
 sed '/RTLDLIST=/s@/usr@@g' -i $DESTDIR/usr/bin/ldd
 
-cp -v ../nscd/nscd.conf $DESTDIR/etc/nscd.conf.new
+cp -v ../nscd/nscd.conf $DESTDIR/etc/nscd.conf
 
-install -v -Dm644 ../nscd/nscd.tmpfiles $DESTDIR/usr/lib/tmpfiles.d/nscd.conf.new
+install -v -Dm644 ../nscd/nscd.tmpfiles $DESTDIR/usr/lib/tmpfiles.d/nscd.conf
 
-install -v -Dm644 ../nscd/nscd.service $DESTDIR/usr/lib/systemd/system/nscd.service.new
+install -v -Dm644 ../nscd/nscd.service $DESTDIR/usr/lib/systemd/system/nscd.service
 
-cat >$DESTDIR/etc/nsswitch.conf.new <<"EOF"
+cat >$DESTDIR/etc/nsswitch.conf <<"EOF"
 passwd: files
 group: files
 shadow: files
@@ -66,14 +66,14 @@ ethers: files
 rpc: files
 EOF
 
-cat >$DESTDIR/etc/ld.so.conf.new <<"EOF"
+cat >$DESTDIR/etc/ld.so.conf <<"EOF"
 /usr/local/lib
 /opt/lib
 include /etc/ld.so.conf.d/*.conf
 EOF
 
 # prevent reinstalling glibc as this would nuke the system
-[[ -f /glib-reinstall-ok ]] || {
+[[ -f /glibc-reinstall-ok ]] || {
 	echo "FATAL: refusing to reinstall glibc" 1>&2
 	exit 1
 }
@@ -122,6 +122,16 @@ localedef -i tr_TR -f UTF-8 tr_TR.UTF-8
 localedef -i zh_CN -f GB18030 zh_CN.GB18030
 localedef -i zh_HK -f BIG5-HKSCS zh_HK.BIG5-HKSCS
 localedef -i zh_TW -f UTF-8 zh_TW.UTF-8
+
+# register extra files installed by this package
+(cd / && find ./etc/ld.so.conf.d ./usr/lib/locale ./var/cache/nscd -exec ls -dF {} \;) \
+	>>/var/lib/pkg-tools/manifest/$pkg_name.txt
+
+echo './var/cache/ldconfig/' >>/var/lib/pkg-tools/manifest/$pkg_name.txt
+echo './var/cache/ldconfig/aux-cache' >>/var/lib/pkg-tools/manifest/$pkg_name.txt
+
+# remove file allowing reinstalling glibc
+rm -f /glibc-reinstall-ok
 
 # remove temporary dir
 rm -rf $WORK

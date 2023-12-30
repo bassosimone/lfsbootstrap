@@ -39,10 +39,11 @@ DESTDIR=$WORK/___destdir___
 # install package into the temporary destination dir
 make DESTDIR=$DESTDIR install
 
-find $DESTDIR/etc -type f -exec mv {} {}.new \;
-
 # create package manifest
 /sbin/pkg-mkmanifest $DESTDIR $pkg_name
+
+echo './var/lib/sshd/' >>/var/lib/pkg-tools/manifest/$pkg_name.txt
+echo './var/mail/sshd' >>/var/lib/pkg-tools/manifest/$pkg_name.txt
 
 # install the actual package in the root
 /sbin/pkg-install $DESTDIR

@@ -18,6 +18,10 @@ make headers
 find usr/include -type f ! -name '*.h' -delete
 cp -rv usr/include $LFS/usr
 
+# register the headers we installed
+(cd $LFS && find ./usr/include -exec ls -dF {} \;) \
+	>$LFS/var/lib/pkg-tools/manifest/linux-headers-6.4.12.txt
+
 # remove sources
 cd $TOPDIR
 rm -rf linux-6.4.12

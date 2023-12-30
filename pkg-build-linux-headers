@@ -1,35 +1,6 @@
 #!/bin/bash
 set -euxo pipefail
 
-# create temporary directory
-WORK=$(mktemp -d)
-cd $WORK
-
-# extract sources
-pkg_name=linux-6.4.12
-tar -xf /usr/src/$pkg_name.tar.xz
-cd $pkg_name
-
-# prepare the package
-make mrproper
-
-make headers
-find usr/include -type f ! -name '*.h' -delete
-
-# create temporary destination dir
-DESTDIR=$WORK/___destdir___
-/sbin/pkg-mkskel $DESTDIR
-
-# install package into the temporary destination dir
-cp -rv usr/include $DESTDIR/usr
-
-# create package manifest
-#
-# Note: we need to override the package name here
-/sbin/pkg-mkmanifest $DESTDIR $(echo $pkg_name | sed 's/^linux-/linux-headers-/g')
-
-# install the actual package in the root
-/sbin/pkg-install $DESTDIR
-
-# remove temporary dir
-rm -rf $WORK
+# TODO(bassosimone): this script is now unnecessary because now we
+# register installing headers during stage0. We should zap it.
+true

@@ -35,10 +35,6 @@ rm -fv $DESTDIR/usr/lib/{libcom_err,libe2p,libext2fs,libss}.a
 
 gunzip -v $DESTDIR/usr/share/info/libext2fs.info.gz
 
-for file in $(find $DESTDIR/etc -type f); do
-	mv $file $file.new
-done
-
 # create package manifest
 /sbin/pkg-mkmanifest $DESTDIR $pkg_name
 

@@ -18,8 +18,8 @@ DESTDIR=$WORK/___destdir___
 /sbin/pkg-mkskel $DESTDIR
 
 # install package into the temporary destination dir
-cp services $DESTDIR/etc/services.new
-cp protocols $DESTDIR/etc/protocols.new
+cp services $DESTDIR/etc/services
+cp protocols $DESTDIR/etc/protocols
 
 # create package manifest
 /sbin/pkg-mkmanifest $DESTDIR $pkg_name

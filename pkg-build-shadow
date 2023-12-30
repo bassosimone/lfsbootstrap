@@ -3,7 +3,6 @@ set -euxo pipefail
 
 # run the preinstallation script
 touch /usr/bin/passwd
-mkdir -p /etc/default
 
 # create temporary directory
 WORK=$(mktemp -d)
@@ -40,9 +39,7 @@ DESTDIR=$WORK/___destdir___
 make DESTDIR=$DESTDIR exec_prefix=/usr install
 make DESTDIR=$DESTDIR -C man install-man
 
-mv $DESTDIR/etc/login.access{,.new}
-mv $DESTDIR/etc/limits{,.new}
-mv $DESTDIR/etc/login.defs{,.new}
+mkdir $DESTDIR/etc/default
 
 # create package manifest
 /sbin/pkg-mkmanifest $DESTDIR $pkg_name
@@ -59,3 +56,8 @@ fi
 
 # remove temporary dir
 rm -rf $WORK
+
+# append the additional files created by the post
+# installation script inside the /etc directory
+(cd / && find ./etc/default ./etc/{,g}shadow -exec ls -dF {} \;) \
+	>>/var/lib/pkg-tools/manifest/$pkg_name.txt
