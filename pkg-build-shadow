@@ -39,10 +39,6 @@ DESTDIR=$WORK/___destdir___
 make DESTDIR=$DESTDIR exec_prefix=/usr install
 make DESTDIR=$DESTDIR -C man install-man
 
-mv $DESTDIR/etc/login.access
-mv $DESTDIR/etc/limits
-mv $DESTDIR/etc/login.defs
-
 mkdir $DESTDIR/etc/default
 
 # create package manifest

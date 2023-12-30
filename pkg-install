@@ -7,13 +7,20 @@ if [[ $# != 1 ]]; then
 fi
 
 # make sure we're not going to overwrite configuration files by default
-(cd $1 && find ./etc ./usr/lib/tmpfiles.d/ ./usr/lib/systemd/system -type f -exec mv {} {}.new \;)
+for dir in $1/etc $1/usr/lib/tmpfiles.d $1/usr/lib/systemd/system; do
+	if [[ ! -d $dir ]]; then
+		continue
+	fi
+	find $dir -type f -exec mv {} {}.new \;
+done
 
 # strip binaries before installing them
-for file in $(find $1/usr/{bin,lib,libexec,sbin} -type f); do
-	if readelf -h $file >/dev/null 2>&1; then
-		strip -g $file
-	fi
+for dir in $1/usr/{bin,lib,libexec,sbin}; do
+	for file in $(find $dir -type f); do
+		if readelf -h $file >/dev/null 2>&1; then
+			strip -g $file
+		fi
+	done
 done
 
 # create inline archive and extract to root directory
