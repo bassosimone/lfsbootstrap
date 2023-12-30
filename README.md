@@ -42,6 +42,11 @@ mkdir lfs-12.0
 wsl.exe --import lfs-12.0 .\lfs-12.0 .\stage5.tar
 ```
 
+## Errata
+
+The file `./usr/lib/libstdc++.so.6.0.32-gdb.py` should not
+be part of the system and can safely be removed.
+
 ## Deploying security fixes
 
 Periodically check the [security advisories](https://www.linuxfromscratch.org/blfs/advisories/consolidated.html).
