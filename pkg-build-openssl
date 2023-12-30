@@ -28,7 +28,6 @@ sed -i '/INSTALL_LIBS/s/libcrypto.a libssl.a//' Makefile
 make MANSUFFIX=ssl DESTDIR=$DESTDIR install
 
 mv -v $DESTDIR/usr/share/doc/openssl $DESTDIR/usr/share/doc/openssl-3.1.2
-find $DESTDIR/etc -type f -exec mv {} {}.new \;
 
 # create package manifest
 /sbin/pkg-mkmanifest $DESTDIR $pkg_name

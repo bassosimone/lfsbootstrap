@@ -32,7 +32,7 @@ done
 install -d $DESTDIR/usr/share/doc/
 ln -sv ../vim/vim90/doc $DESTDIR/usr/share/doc/vim-9.0.1677
 
-cat >$DESTDIR/etc/vimrc.new <<"EOF"
+cat >$DESTDIR/etc/vimrc <<"EOF"
 EOF
 
 # create package manifest

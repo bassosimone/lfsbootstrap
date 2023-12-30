@@ -24,8 +24,6 @@ DESTDIR=$WORK/___destdir___
 # install package into the temporary destination dir
 make DESTDIR=$DESTDIR perllibdir=/usr/lib/perl5/5.38/site_perl install
 
-find $DESTDIR/etc -type f -exec mv {} {}.new \;
-
 # create package manifest
 /sbin/pkg-mkmanifest $DESTDIR $pkg_name
 

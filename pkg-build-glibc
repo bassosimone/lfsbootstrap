@@ -46,13 +46,13 @@ make DESTDIR=$DESTDIR install
 
 sed '/RTLDLIST=/s@/usr@@g' -i $DESTDIR/usr/bin/ldd
 
-cp -v ../nscd/nscd.conf $DESTDIR/etc/nscd.conf.new
+cp -v ../nscd/nscd.conf $DESTDIR/etc/nscd.conf
 
-install -v -Dm644 ../nscd/nscd.tmpfiles $DESTDIR/usr/lib/tmpfiles.d/nscd.conf.new
+install -v -Dm644 ../nscd/nscd.tmpfiles $DESTDIR/usr/lib/tmpfiles.d/nscd.conf
 
-install -v -Dm644 ../nscd/nscd.service $DESTDIR/usr/lib/systemd/system/nscd.service.new
+install -v -Dm644 ../nscd/nscd.service $DESTDIR/usr/lib/systemd/system/nscd.service
 
-cat >$DESTDIR/etc/nsswitch.conf.new <<"EOF"
+cat >$DESTDIR/etc/nsswitch.conf <<"EOF"
 passwd: files
 group: files
 shadow: files
@@ -66,7 +66,7 @@ ethers: files
 rpc: files
 EOF
 
-cat >$DESTDIR/etc/ld.so.conf.new <<"EOF"
+cat >$DESTDIR/etc/ld.so.conf <<"EOF"
 /usr/local/lib
 /opt/lib
 include /etc/ld.so.conf.d/*.conf

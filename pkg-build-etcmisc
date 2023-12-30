@@ -12,25 +12,25 @@ DESTDIR=$WORK/___destdir___
 /sbin/pkg-mkskel $DESTDIR
 
 # install package into the temporary destination dir
-cat >$DESTDIR/etc/resolv.conf.new <<"EOF"
+cat >$DESTDIR/etc/resolv.conf <<"EOF"
 nameserver 8.8.8.8
 nameserver 2001:4860:4860::8888
 EOF
 
-echo "lfs-12.0-systemd" >$DESTDIR/etc/hostname.new
+echo "lfs-12.0-systemd" >$DESTDIR/etc/hostname
 
-cat >$DESTDIR/etc/hosts.new <<"EOF"
+cat >$DESTDIR/etc/hosts <<"EOF"
 127.0.0.1 localhost.localdomain localhost
 ::1       localhost ip6-localhost ip6-loopback
 ff02::1   ip6-allnodes
 ff02::2   ip6-allrouters
 EOF
 
-cat >$DESTDIR/etc/locale.conf.new <<"EOF"
+cat >$DESTDIR/etc/locale.conf <<"EOF"
 LANG=en_US.UTF-8
 EOF
 
-cat >$DESTDIR/etc/inputrc.new <<"EOF"
+cat >$DESTDIR/etc/inputrc <<"EOF"
 # Allow the command prompt to wrap to the next line
 set horizontal-scroll-mode Off
 
@@ -69,22 +69,22 @@ set bell-style none
 "\e[F": end-of-line
 EOF
 
-cat >$DESTDIR/etc/shells.new <<"EOF"
+cat >$DESTDIR/etc/shells <<"EOF"
 /bin/sh
 /bin/bash
 /bin/zsh
 EOF
 
-echo 12.0-systemd >$DESTDIR/etc/lfs-release.new
+echo 12.0-systemd >$DESTDIR/etc/lfs-release
 
-cat >$DESTDIR/etc/lsb-release.new <<"EOF"
+cat >$DESTDIR/etc/lsb-release <<"EOF"
 DISTRIB_ID="Linux From Scratch"
 DISTRIB_RELEASE="12.0-systemd"
 DISTRIB_CODENAME="Self Checking"
 DISTRIB_DESCRIPTION="Linux From Scratch"
 EOF
 
-cat >$DESTDIR/etc/os-release.new <<"EOF"
+cat >$DESTDIR/etc/os-release <<"EOF"
 NAME="Linux From Scratch"
 VERSION="12.0-systemd"
 ID=lfs

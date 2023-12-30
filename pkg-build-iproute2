@@ -23,10 +23,6 @@ DESTDIR=$WORK/___destdir___
 # install package into the temporary destination dir
 make DESTDIR=$DESTDIR SBINDIR=/usr/sbin install
 
-for file in $(find $DESTDIR/etc -type f); do
-	mv $file $file.new
-done
-
 # create package manifest
 /sbin/pkg-mkmanifest $DESTDIR $pkg_name
 

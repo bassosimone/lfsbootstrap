@@ -26,7 +26,7 @@ DESTDIR=$WORK/___destdir___
 # install package into the temporary destination dir
 make DESTDIR=$DESTDIR install
 
-cat >$DESTDIR/etc/pip.conf.new <<EOF
+cat >$DESTDIR/etc/pip.conf <<EOF
 [global]
 root-user-action = ignore
 disable-pip-version-check = true

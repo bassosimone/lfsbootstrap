@@ -6,6 +6,9 @@ if [[ $# != 1 ]]; then
 	exit 1
 fi
 
+# make sure we're not going to overwrite configuration files by default
+(cd $1 && find ./etc ./usr/lib/tmpfiles.d/ ./usr/lib/systemd/system -type f -exec mv {} {}.new \;)
+
 # create inline archive and extract to root directory
 tar -C $1 -cf- . | tar -C / -xvf-
 
@@ -13,8 +16,9 @@ tar -C $1 -cf- . | tar -C / -xvf-
 for entry_dot_new in $(find /etc /usr/lib/tmpfiles.d/ /usr/lib/systemd/system/ -type f -name \*.new); do
 	entry=${entry_dot_new%%.new}
 
-	# if there's no pre-existing entry just move it
-	if [[ ! -f $entry ]]; then
+	# if there's no pre-existing entry or the entry size is
+	# zero, then just just move the new file in place
+	if [[ ! -s $entry ]]; then
 		mv $entry_dot_new $entry
 		continue
 	fi
