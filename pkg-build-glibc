@@ -73,7 +73,7 @@ include /etc/ld.so.conf.d/*.conf
 EOF
 
 # prevent reinstalling glibc as this would nuke the system
-[[ -f /glib-reinstall-ok ]] || {
+[[ -f /glibc-reinstall-ok ]] || {
 	echo "FATAL: refusing to reinstall glibc" 1>&2
 	exit 1
 }
@@ -126,6 +126,12 @@ localedef -i zh_TW -f UTF-8 zh_TW.UTF-8
 # register extra files installed by this package
 (cd / && find ./etc/ld.so.conf.d ./usr/lib/locale ./var/cache/nscd -ls) \
 	>>/var/lib/pkg-tools/manifest/$pkg_name.txt
+
+echo './var/cache/ld-config/' >>/var/lib/pkg-tools/manifest/$pkg_name.txt
+echo './var/cache/ld-config/aux-cache' >>/var/lib/pkg-tools/manifest/$pkg_name.txt
+
+# remove file allowing reinstalling glibc
+rm -f /glibc-reinstall-ok
 
 # remove temporary dir
 rm -rf $WORK

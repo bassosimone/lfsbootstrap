@@ -63,6 +63,11 @@ make DESTDIR=$LFS install
 # create the cc alias
 ln -sfv gcc $LFS/usr/bin/cc
 
+# remove installed file that would not otherwise be
+# tracked by the subsequent gcc installation because
+# it is moved into another location by the build
+rm -f ./usr/lib/libstdc++.so.6.0.32-gdb.py
+
 # remove sources
 cd $TOPDIR
 rm -rf gcc-13.2.0

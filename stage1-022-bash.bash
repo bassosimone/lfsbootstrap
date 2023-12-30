@@ -26,7 +26,8 @@ make DESTDIR=$LFS install
 ln -sfv bash $LFS/bin/sh
 
 # register that we created a symbolic link for sh
-(cd $LFS && find ./bin/sh ./usr/bin/sh -ls) >$LFS/var/lib/pkg-tools/manifest/aaa-bin-sh-symlink-12.0.20231229.txt
+(cd $LFS && find ./usr/bin/sh -exec ls -dF {} \;) \
+	>$LFS/var/lib/pkg-tools/manifest/aaa-bin-sh-symlink-12.0.20231229.txt
 
 # remove sources
 cd $TOPDIR

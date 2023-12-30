@@ -24,4 +24,4 @@ find $1 -depth -type d -empty -exec rmdir {} \;
 manifest=$(echo $2 | tr 'A-Z' 'a-z' | tr '_' '-')
 
 # create the installation manifest
-(cd $1 && find . -ls) >/var/lib/pkg-tools/manifest/$manifest.txt
+(cd $1 && find . -exec ls -dF {} \;) >/var/lib/pkg-tools/manifest/$manifest.txt

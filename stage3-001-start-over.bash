@@ -8,3 +8,4 @@ set -euxo pipefail
 rm -rf $LFS
 install -d $LFS
 tar -C $LFS -xf stage2.tar
+touch $LFS/glibc-reinstall-ok # allow installing glibc

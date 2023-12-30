@@ -19,13 +19,12 @@ util_create_skel() {
 		mkdir -pv $destdir/lib64
 		;;
 	esac
-
-	# The following lines should only belong to stage1-001-create-skel.bash
-	mkdir -pv $destdir/tools
 }
 
 util_create_skel $LFS
 
 # The following lines should only belong to stage1-001-create-skel.bash
 install -d $LFS/var/lib/pkg-tools/manifest
-(cd $LFS && find . -ls) >$LFS/var/lib/pkg-tools/manifest/aaa-skel.txt
+(cd $LFS && find . -ls) >MANIFEST
+mv MANIFEST $LFS/var/lib/pkg-tools/manifest/aaa-skel.txt
+mkdir -pv $LFS/tools

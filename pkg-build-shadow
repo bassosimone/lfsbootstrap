@@ -63,4 +63,5 @@ rm -rf $WORK
 
 # append the additional files created by the post
 # installtion script inside the /etc directory
-(cd / && find ./etc/default /etc/{,g}shadow -ls) >>/var/lib/pkg-tools/manifest/$pkg_name.txt
+(cd / && find ./etc/default ./etc/{,g}shadow -exec ls -dF {} \;) \
+	>>/var/lib/pkg-tools/manifest/$pkg_name.txt

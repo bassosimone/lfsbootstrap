@@ -7,7 +7,7 @@ setup() {
 	mkdir -pv ${prefix}{boot,home,mnt,opt,srv}
 
 	mkdir -pv ${prefix}etc/{opt,sysconfig}
-	mkdir -pv ${prefix}lib/firmware
+	mkdir -pv ${prefix}usr/lib/firmware
 	mkdir -pv ${prefix}media/{floppy,cdrom}
 	mkdir -pv ${prefix}usr/{,local/}{include,src}
 	mkdir -pv ${prefix}usr/local/{bin,lib,sbin}
@@ -97,7 +97,7 @@ setup /
 # rerun setup into a temporary dir to capture what changed
 install -d /tmp/altroot
 setup /tmp/altroot/
-(cd /tmp/altroot && find . -ls) >/var/lib/pkg-tools/manifest/aaa-skel-stage2.txt
+(cd /tmp/altroot && find . -exec ls -dF {} \;) >/var/lib/pkg-tools/manifest/aaa-skel-stage2.txt
 find /tmp/altroot -type l -exec rm {} \;
 find /tmp/altroot -type f -exec rm {} \;
 find /tmp/altroot -depth -type d -exec rmdir {} \;

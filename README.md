@@ -28,9 +28,7 @@ You should already have all the required packages installed.
 sudo ./stage2.bash
 
 # Chapter 8
-sudo touch ./rootfs/glibc-reinstall-ok
 sudo ./stage3.bash
-sudo rm -f ./rootfs/glibc-reinstall-ok
 sudo ./stage4.bash
 
 # Chapters 9, 10, and 11 plus some BLFS
