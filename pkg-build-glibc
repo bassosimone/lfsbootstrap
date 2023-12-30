@@ -124,11 +124,11 @@ localedef -i zh_HK -f BIG5-HKSCS zh_HK.BIG5-HKSCS
 localedef -i zh_TW -f UTF-8 zh_TW.UTF-8
 
 # register extra files installed by this package
-(cd / && find ./etc/ld.so.conf.d ./usr/lib/locale ./var/cache/nscd -ls) \
+(cd / && find ./etc/ld.so.conf.d ./usr/lib/locale ./var/cache/nscd -exec ls -dF {} \;) \
 	>>/var/lib/pkg-tools/manifest/$pkg_name.txt
 
-echo './var/cache/ld-config/' >>/var/lib/pkg-tools/manifest/$pkg_name.txt
-echo './var/cache/ld-config/aux-cache' >>/var/lib/pkg-tools/manifest/$pkg_name.txt
+echo './var/cache/ldconfig/' >>/var/lib/pkg-tools/manifest/$pkg_name.txt
+echo './var/cache/ldconfig/aux-cache' >>/var/lib/pkg-tools/manifest/$pkg_name.txt
 
 # remove file allowing reinstalling glibc
 rm -f /glibc-reinstall-ok
