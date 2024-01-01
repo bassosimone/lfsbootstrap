@@ -69,7 +69,7 @@ https://sourceware.org/ftp/elfutils/0.189/elfutils-0.189.tar.bz2
 https://sourceware.org/pub/binutils/releases/binutils-2.41.tar.xz
 https://sqlite.org/2023/sqlite-autoconf-3420000.tar.gz
 https://tukaani.org/xz/xz-5.4.4.tar.xz
-https://www.cpan.org/src/5.0/perl-5.38.2.tar.xz
+https://www.cpan.org/src/5.0/perl-5.38.2.tar.gz
 https://www.greenwoodsoftware.com/less/less-643.tar.gz
 https://www.iana.org/time-zones/repository/releases/tzdata2023c.tar.gz
 https://www.kernel.org/pub/linux/docs/man-pages/man-pages-6.05.01.tar.xz
@@ -83,7 +83,7 @@ https://www.kernel.org/pub/software/scm/git/git-2.41.0.tar.xz
 https://www.linuxfromscratch.org/patches/lfs/12.0/bzip2-1.0.8-install_docs-1.patch
 https://www.linuxfromscratch.org/patches/lfs/12.0/coreutils-9.3-i18n-1.patch
 https://www.linuxfromscratch.org/patches/lfs/12.0/glibc-2.38-fhs-1.patch
-https://www.linuxfromscratch.org/patches/lfs/12.0/glibc-2.38-upstream_fixes-3.patch
+https://www.linuxfromscratch.org/patches/lfs/development/glibc-2.38-upstream_fixes-3.patch
 https://www.linuxfromscratch.org/patches/lfs/12.0/grub-2.06-upstream_fixes-1.patch
 https://www.linuxfromscratch.org/patches/lfs/12.0/kbd-2.6.1-backspace-1.patch
 https://www.linuxfromscratch.org/patches/lfs/12.0/readline-8.2-upstream_fix-1.patch

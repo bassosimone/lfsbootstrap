@@ -9,7 +9,12 @@ install -d tarballs
 cd tarballs
 
 # download all the files
-wget --input-file=../wget-list-systemd --continue
+for URL in $(cat ../wget-list-systemd); do
+	filename=$(basename $URL)
+	if [[ ! -f $filename ]]; then
+		curl -fsSLO $URL
+	fi
+done
 
 # verify the checksum
-shasum -a 256 ../SHA256SUMS
+shasum -c ../SHA256SUMS
