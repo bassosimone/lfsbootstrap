@@ -5,7 +5,7 @@ WORK=$(mktemp -d)
 cd $WORK
 
 # there no unpacking but let's still define the package name
-pkg_name=etcmisc-12.0.20231227
+pkg_name=etcmisc-12.0.20240101
 
 # create temporary destination dir
 DESTDIR=$WORK/___destdir___
