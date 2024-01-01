@@ -46,6 +46,8 @@ wsl.exe --import lfs-12.0 .\lfs-12.0 .\stage5.tar
 
 Periodically check the [security advisories](https://www.linuxfromscratch.org/blfs/advisories/consolidated.html).
 
+Remember to update [wget-list-systemd](wget-list-systemd) and [SHA256SUMS](SHA256SUMS).
+
 Download tarballs and install them at `/usr/src` using `install -m644 -v`.
 
 Update the corresponding `pkg-build-XXX` script.
