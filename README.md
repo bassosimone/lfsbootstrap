@@ -35,6 +35,18 @@ sudo ./stage4.bash
 sudo ./stage5.bash
 ```
 
+Each stage consists of several scripts named such that they
+run in the correct sequence for building the rootfs.
+
+We do not build all packages mentioned in chapter 8, 9, and 10,
+rather we just build the ones we need to use under WSL2.
+
+The script naming sequence jumps when we skip packages so that
+it is possible to reconstruct which packages we're skipping.
+
+We include some BLFS packages required to download tarballs
+from the internet, such that we can upgrade the system.
+
 ## Importing the LFS tarball
 
 ```console
