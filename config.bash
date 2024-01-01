@@ -24,3 +24,8 @@ set +h
 
 # make sure we have MAKEFLAGS set
 export MAKEFLAGS=-j$(nproc)
+
+# possibly honour a config-local.bash file
+if [[ -f config-local.bash ]]; then
+	. config-local.bash
+fi
