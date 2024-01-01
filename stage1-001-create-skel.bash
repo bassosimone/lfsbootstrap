@@ -26,5 +26,5 @@ util_create_skel $LFS
 # The following lines should only belong to stage1-001-create-skel.bash
 install -d $LFS/var/lib/pkg-tools/manifest
 (cd $LFS && find . -exec ls -dF {} \;) >MANIFEST
-mv MANIFEST $LFS/var/lib/pkg-tools/manifest/aaa-skel.txt
+mv MANIFEST $LFS/var/lib/pkg-tools/manifest/aaa-skel-stage1.txt
 mkdir -pv $LFS/tools

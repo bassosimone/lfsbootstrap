@@ -23,7 +23,7 @@ esac
 
 # register that we installed symbolic links
 (cd $LFS && find ./lib64 -exec ls -dF {} \;) \
-	>$LFS/var/lib/pkg-tools/manifest/aaa-ld-so-symlinks-12.0.20231229.txt
+	>$LFS/var/lib/pkg-tools/manifest/ld-so-symlinks-12.0.20231229.txt
 
 # ensure FHS compliance
 patch -Np1 -i $LFS/usr/src/glibc-2.38-fhs-1.patch

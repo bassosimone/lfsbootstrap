@@ -27,7 +27,7 @@ ln -sfv bash $LFS/bin/sh
 
 # register that we created a symbolic link for sh
 (cd $LFS && find ./usr/bin/sh -exec ls -dF {} \;) \
-	>$LFS/var/lib/pkg-tools/manifest/aaa-bin-sh-symlink-12.0.20231229.txt
+	>$LFS/var/lib/pkg-tools/manifest/bin-sh-symlink-12.0.20231229.txt
 
 # remove sources
 cd $TOPDIR
