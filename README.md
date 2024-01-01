@@ -55,7 +55,8 @@ Update the corresponding `pkg-build-XXX` script.
 As root, run `bash pkg-build-XXX` to recompile and install.
 
 You cannot reinstall `glibc`. The install script will fail and leave under `/tmp` a
-`DESTDIR` installation from which you can pick files to manually install.
+`DESTDIR` installation from which you can pick files to manually install (refer
+to specific instructions in the security advisory).
 
 Remember to update the [VERSION](VERSION) file with the correct patch level.
 
